@@ -20,7 +20,8 @@ def movies():
                     "image_url": "https://ksassets.timeincuk.net/wp/uploads/sites/55/2018/02/KXC1W2-920x584.jpg"
                     }
                     """
-    return render_template('movie.html', movie={})
+    json_dict = json.loads(json_string)
+    return render_template('movie.html', movie=json_dict)
 
 
 @app.route('/tvshows')
@@ -32,8 +33,7 @@ def tv_shows():
     "language":"English",
     "genres":[  
       "Drama",
-      "Crime"
-    ]},
+      "Crime"]},
     {  
     "url":"http://www.tvmaze.com/shows/305/black-mirror",
     "name":"Black Mirror",
@@ -55,6 +55,7 @@ def tv_shows():
     ]
     }]    
     """
+
     # Write code here to take the `json_string` and return list of movies to the user
 
 
@@ -74,7 +75,10 @@ def dog_breeds():
     Do a GET request to the link above to get all dog breeds and return them
     to them as a list to the user as a bullet pointed list
     """
-    return render_template('dogs.html')
+    json_string = requests.get("https://dog.ceo/api/breeds/list/all")
+    json_content = json.loads(json_string.content)
+    dog_breeds = json_content["message"]
+    return render_template('dogs.html', dog_breeds = dog_breeds)
 
 if __name__ == '__main__':
     app.run(debug=True)
